@@ -57,5 +57,7 @@ namespace Cultural_Center
         public DbSet<Cultural_Center.Models.Students> Students { get; set; }
 
         public DbSet<Cultural_Center.Models.Lessons> Lessons { get; set; }
+
+        public DbSet<Cultural_Center.Models.StudentGroups> StudentGroups { get; set; }
     }
 }
