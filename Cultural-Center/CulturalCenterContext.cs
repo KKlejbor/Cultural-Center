@@ -53,5 +53,7 @@ namespace Cultural_Center
         public DbSet<Subjects> Subjects { get; set; }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<Cultural_Center.Models.Students> Students { get; set; }
     }
 }
