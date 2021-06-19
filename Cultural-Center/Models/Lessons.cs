@@ -19,6 +19,7 @@ namespace Cultural_Center.Models
         public DateTime EndDate { get; set; }
         
         public int NumberOfParticipants { get; set; }
+        [MaxLength(3)]
         public string ClassroomNumber { get; set; }
         public int SubjectsId { get; set; }
         public Subjects Subject { get; set; }

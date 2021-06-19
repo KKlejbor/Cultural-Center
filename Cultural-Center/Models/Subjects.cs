@@ -7,6 +7,7 @@ namespace Cultural_Center.Models
     {
         [Key]
         public int Id { get; set;}
+        [MaxLength(30)]
         public string Name { get; set;}
         public int InstructorsId { get; set; }
         public Instructors Instructor { get; set; }
