@@ -39,12 +39,23 @@ namespace Cultural_Center
                 .WithMany(s => s.Lessons)
                 .HasForeignKey(l => l.SubjectsId);
             modelBuilder.Entity<StudentGroups>()
-                .HasOne<Lessons>(s => s.Lesson)
+                .HasOne<Lessons>(sg => sg.Lesson)
                 .WithMany(l => l.StudentGroups)
-                .HasForeignKey(s => s.LessonsId);
-            modelBuilder.Entity<StudentGroups>()
-                .HasMany<Students>(s => s.Students)
-                .WithMany(s => s.StudentGroups);
+                .HasForeignKey(sg => sg.LessonsId);
+            modelBuilder.Entity<StudentGroupsStudents>()
+                .HasKey(sgs => new { sgs.StudentGroupsId, sgs.StudentsId });
+            modelBuilder.Entity<StudentGroupsStudents>()
+                .HasOne<StudentGroups>(sgs => sgs.StudentGroup)
+                .WithMany(sg => sg.StudentGroupsStudents)
+                .HasForeignKey(sgs => sgs.StudentGroupsId);
+            modelBuilder.Entity<StudentGroupsStudents>()
+                .HasOne<StudentGroups>(sgs => sgs.StudentGroup)
+                .WithMany(sg => sg.StudentGroupsStudents)
+                .HasForeignKey(sgs => sgs.StudentGroupsId);
+            modelBuilder.Entity<StudentGroupsStudents>()
+                .HasOne<Students>(sgs => sgs.Student)
+                .WithMany(s => s.StudentGroupsStudents)
+                .HasForeignKey(sgs => sgs.StudentsId);
 
             OnModelCreatingPartial(modelBuilder);
         }

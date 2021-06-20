@@ -23,6 +23,7 @@ namespace Cultural_Center.Models
         
         public int LessonsId { get; set; }
         public Lessons Lesson { get; set; }
-        public ICollection<Students> Students { get; set; }
+        public ICollection<StudentGroupsStudents> StudentGroupsStudents { get; set; }
+
     }
 }
