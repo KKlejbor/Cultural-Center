@@ -10,23 +10,23 @@ using Cultural_Center.Models;
 
 namespace Cultural_Center.Controllers
 {
-    public class StudentGroupsStudentsController : Controller
+    public class EnrollmentsController : Controller
     {
         private readonly CulturalCenterContext _context;
 
-        public StudentGroupsStudentsController(CulturalCenterContext context)
+        public EnrollmentsController(CulturalCenterContext context)
         {
             _context = context;
         }
 
-        // GET: StudentGroupsStudents
+        // GET: Enrollments
         public async Task<IActionResult> Index()
         {
-            var culturalCenterContext = _context.StudentGroupsStudents.Include(s => s.Student).Include(s => s.StudentGroup);
+            var culturalCenterContext = _context.Enrollments.Include(e => e.Student).Include(e => e.StudentGroup);
             return View(await culturalCenterContext.ToListAsync());
         }
 
-        // GET: StudentGroupsStudents/Details/5
+        // GET: Enrollments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,19 +34,19 @@ namespace Cultural_Center.Controllers
                 return NotFound();
             }
 
-            var studentGroupsStudents = await _context.StudentGroupsStudents
-                .Include(s => s.Student)
-                .Include(s => s.StudentGroup)
+            var enrollments = await _context.Enrollments
+                .Include(e => e.Student)
+                .Include(e => e.StudentGroup)
                 .FirstOrDefaultAsync(m => m.StudentGroupsId == id);
-            if (studentGroupsStudents == null)
+            if (enrollments == null)
             {
                 return NotFound();
             }
 
-            return View(studentGroupsStudents);
+            return View(enrollments);
         }
 
-        // GET: StudentGroupsStudents/Create
+        // GET: Enrollments/Create
         public IActionResult Create()
         {
             ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address");
@@ -54,25 +54,25 @@ namespace Cultural_Center.Controllers
             return View();
         }
 
-        // POST: StudentGroupsStudents/Create
+        // POST: Enrollments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentGroupsId,StudentsId")] StudentGroupsStudents studentGroupsStudents)
+        public async Task<IActionResult> Create([Bind("StudentGroupsId,StudentsId")] Enrollments enrollments)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(studentGroupsStudents);
+                _context.Add(enrollments);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", studentGroupsStudents.StudentsId);
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", studentGroupsStudents.StudentGroupsId);
-            return View(studentGroupsStudents);
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", enrollments.StudentsId);
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", enrollments.StudentGroupsId);
+            return View(enrollments);
         }
 
-        // GET: StudentGroupsStudents/Edit/5
+        // GET: Enrollments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,24 +80,24 @@ namespace Cultural_Center.Controllers
                 return NotFound();
             }
 
-            var studentGroupsStudents = await _context.StudentGroupsStudents.FindAsync(id);
-            if (studentGroupsStudents == null)
+            var enrollments = await _context.Enrollments.FindAsync(id);
+            if (enrollments == null)
             {
                 return NotFound();
             }
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", studentGroupsStudents.StudentsId);
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", studentGroupsStudents.StudentGroupsId);
-            return View(studentGroupsStudents);
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", enrollments.StudentsId);
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", enrollments.StudentGroupsId);
+            return View(enrollments);
         }
 
-        // POST: StudentGroupsStudents/Edit/5
+        // POST: Enrollments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentGroupsId,StudentsId")] StudentGroupsStudents studentGroupsStudents)
+        public async Task<IActionResult> Edit(int id, [Bind("StudentGroupsId,StudentsId")] Enrollments enrollments)
         {
-            if (id != studentGroupsStudents.StudentGroupsId)
+            if (id != enrollments.StudentGroupsId)
             {
                 return NotFound();
             }
@@ -106,12 +106,12 @@ namespace Cultural_Center.Controllers
             {
                 try
                 {
-                    _context.Update(studentGroupsStudents);
+                    _context.Update(enrollments);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentGroupsStudentsExists(studentGroupsStudents.StudentGroupsId))
+                    if (!EnrollmentsExists(enrollments.StudentGroupsId))
                     {
                         return NotFound();
                     }
@@ -122,12 +122,12 @@ namespace Cultural_Center.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", studentGroupsStudents.StudentsId);
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", studentGroupsStudents.StudentGroupsId);
-            return View(studentGroupsStudents);
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", enrollments.StudentsId);
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", enrollments.StudentGroupsId);
+            return View(enrollments);
         }
 
-        // GET: StudentGroupsStudents/Delete/5
+        // GET: Enrollments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,32 +135,32 @@ namespace Cultural_Center.Controllers
                 return NotFound();
             }
 
-            var studentGroupsStudents = await _context.StudentGroupsStudents
-                .Include(s => s.Student)
-                .Include(s => s.StudentGroup)
+            var enrollments = await _context.Enrollments
+                .Include(e => e.Student)
+                .Include(e => e.StudentGroup)
                 .FirstOrDefaultAsync(m => m.StudentGroupsId == id);
-            if (studentGroupsStudents == null)
+            if (enrollments == null)
             {
                 return NotFound();
             }
 
-            return View(studentGroupsStudents);
+            return View(enrollments);
         }
 
-        // POST: StudentGroupsStudents/Delete/5
+        // POST: Enrollments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var studentGroupsStudents = await _context.StudentGroupsStudents.FindAsync(id);
-            _context.StudentGroupsStudents.Remove(studentGroupsStudents);
+            var enrollments = await _context.Enrollments.FindAsync(id);
+            _context.Enrollments.Remove(enrollments);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentGroupsStudentsExists(int id)
+        private bool EnrollmentsExists(int id)
         {
-            return _context.StudentGroupsStudents.Any(e => e.StudentGroupsId == id);
+            return _context.Enrollments.Any(e => e.StudentGroupsId == id);
         }
     }
 }

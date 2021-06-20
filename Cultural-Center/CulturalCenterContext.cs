@@ -42,20 +42,16 @@ namespace Cultural_Center
                 .HasOne<Lessons>(sg => sg.Lesson)
                 .WithMany(l => l.StudentGroups)
                 .HasForeignKey(sg => sg.LessonsId);
-            modelBuilder.Entity<StudentGroupsStudents>()
+            modelBuilder.Entity<Enrollments>()
                 .HasKey(sgs => new { sgs.StudentGroupsId, sgs.StudentsId });
-            modelBuilder.Entity<StudentGroupsStudents>()
-                .HasOne<StudentGroups>(sgs => sgs.StudentGroup)
-                .WithMany(sg => sg.StudentGroupsStudents)
-                .HasForeignKey(sgs => sgs.StudentGroupsId);
-            modelBuilder.Entity<StudentGroupsStudents>()
-                .HasOne<StudentGroups>(sgs => sgs.StudentGroup)
-                .WithMany(sg => sg.StudentGroupsStudents)
-                .HasForeignKey(sgs => sgs.StudentGroupsId);
-            modelBuilder.Entity<StudentGroupsStudents>()
-                .HasOne<Students>(sgs => sgs.Student)
-                .WithMany(s => s.StudentGroupsStudents)
-                .HasForeignKey(sgs => sgs.StudentsId);
+            modelBuilder.Entity<Enrollments>()
+                .HasOne<StudentGroups>(e => e.StudentGroup)
+                .WithMany(sg => sg.Enrollments)
+                .HasForeignKey(e => e.StudentGroupsId);
+            modelBuilder.Entity<Enrollments>()
+                .HasOne<Students>(e => e.Student)
+                .WithMany(s => s.Enrollments)
+                .HasForeignKey(e => e.StudentsId);
 
             OnModelCreatingPartial(modelBuilder);
         }
@@ -71,6 +67,6 @@ namespace Cultural_Center
 
         public DbSet<Cultural_Center.Models.StudentGroups> StudentGroups { get; set; }
 
-        public DbSet<Cultural_Center.Models.StudentGroupsStudents> StudentGroupsStudents { get; set; }
+        public DbSet<Cultural_Center.Models.Enrollments> Enrollments { get; set; }
     }
 }

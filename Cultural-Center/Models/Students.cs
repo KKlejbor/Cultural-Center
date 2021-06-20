@@ -44,6 +44,6 @@ namespace Cultural_Center.Models
         [Required]
         public string EmailAddress { get; set; }
         
-        public ICollection<StudentGroupsStudents> StudentGroupsStudents { get; set; }
+        public ICollection<Enrollments> Enrollments { get; set; }
     }
 }

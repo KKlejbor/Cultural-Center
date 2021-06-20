@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cultural_Center.Models
 {
-    public class StudentGroupsStudents
+    public class Enrollments
     {
         [Key]
         public int StudentGroupsId { get; set; }
