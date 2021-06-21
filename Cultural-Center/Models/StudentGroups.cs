@@ -11,7 +11,8 @@ namespace Cultural_Center.Models
         public int Id { get; set; }
         
         [Required]
-        public byte DayOfTheWeek { get; set; }
+        [MaxLength(9)]
+        public string DayOfTheWeek { get; set; }
         
         [MaxLength(5)]
         [Required]

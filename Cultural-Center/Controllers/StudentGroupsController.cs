@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,6 +50,8 @@ namespace Cultural_Center.Controllers
         public IActionResult Create()
         {
             ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "Id");
+            List<String> weekDays = new List<String>{"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+            ViewData["DayOfTheWeek"] = new SelectList(weekDays);
             return View();
         }
 
@@ -83,6 +86,8 @@ namespace Cultural_Center.Controllers
                 return NotFound();
             }
             ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "Id", studentGroups.LessonsId);
+            List<String> weekDays = new List<String>{"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+            ViewData["DayOfTheWeek"] = new SelectList(weekDays);
             return View(studentGroups);
         }
 
