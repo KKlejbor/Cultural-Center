@@ -48,7 +48,7 @@ namespace Cultural_Center.Controllers
         // GET: StudentGroups/Create
         public IActionResult Create()
         {
-            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "ClassroomNumber");
+            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "Id");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace Cultural_Center.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "ClassroomNumber", studentGroups.LessonsId);
+            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "Id", studentGroups.LessonsId);
             return View(studentGroups);
         }
 
@@ -82,7 +82,7 @@ namespace Cultural_Center.Controllers
             {
                 return NotFound();
             }
-            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "ClassroomNumber", studentGroups.LessonsId);
+            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "Id", studentGroups.LessonsId);
             return View(studentGroups);
         }
 
@@ -118,7 +118,7 @@ namespace Cultural_Center.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "ClassroomNumber", studentGroups.LessonsId);
+            ViewData["LessonsId"] = new SelectList(_context.Lessons, "Id", "Id", studentGroups.LessonsId);
             return View(studentGroups);
         }
 

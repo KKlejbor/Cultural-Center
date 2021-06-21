@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Cultural_Center;
 using Cultural_Center.Models;
 
-namespace Cultural_Center.Views
+namespace Cultural_Center.Controllers
 {
     public class StudentsController : Controller
     {

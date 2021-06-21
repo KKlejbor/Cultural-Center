@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentGroup)
+                @Html.DisplayNameFor(model => model.StudentGroupsId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Student)
+                @Html.DisplayNameFor(model => model.StudentsId)
             </th>
             <th></th>
         </tr>
@@ -25,15 +25,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentGroup.EndTime)
+                @Html.DisplayFor(modelItem => item.StudentGroupsId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Address)
+                @Html.DisplayFor(modelItem => item.StudentsId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { StudentGroupsId = item.StudentGroupsId, StudentsId = item.StudentsId}) |
+                @Html.ActionLink("Details", "Details", new { StudentGroupsId = item.StudentGroupsId, StudentsId = item.StudentsId }) |
+                @Html.ActionLink("Delete", "Delete", new { StudentGroupsId = item.StudentGroupsId, StudentsId = item.StudentsId })
             </td>
         </tr>
 }

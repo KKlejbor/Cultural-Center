@@ -27,9 +27,9 @@ namespace Cultural_Center.Controllers
         }
 
         // GET: Enrollments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? StudentGroupsId, int? StudentsId)
         {
-            if (id == null)
+            if (StudentGroupsId == null || StudentsId == null)
             {
                 return NotFound();
             }
@@ -37,7 +37,7 @@ namespace Cultural_Center.Controllers
             var enrollments = await _context.Enrollments
                 .Include(e => e.Student)
                 .Include(e => e.StudentGroup)
-                .FirstOrDefaultAsync(m => m.StudentGroupsId == id);
+                .FirstOrDefaultAsync(m => m.StudentGroupsId == StudentGroupsId && m.StudentsId == StudentsId);
             if (enrollments == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace Cultural_Center.Controllers
         // GET: Enrollments/Create
         public IActionResult Create()
         {
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address");
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime");
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Id");
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "Id");
             return View();
         }
 
@@ -67,26 +67,26 @@ namespace Cultural_Center.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", enrollments.StudentsId);
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", enrollments.StudentGroupsId);
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Id", enrollments.StudentsId);
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "Id", enrollments.StudentGroupsId);
             return View(enrollments);
         }
 
         // GET: Enrollments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? StudentGroupsId, int? StudentsId)
         {
-            if (id == null)
+            if (StudentGroupsId == null || StudentsId == null)
             {
                 return NotFound();
             }
 
-            var enrollments = await _context.Enrollments.FindAsync(id);
+            var enrollments = await _context.Enrollments.FindAsync(StudentGroupsId, StudentsId);
             if (enrollments == null)
             {
                 return NotFound();
             }
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", enrollments.StudentsId);
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", enrollments.StudentGroupsId);
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Id", enrollments.StudentsId);
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "Id", enrollments.StudentGroupsId);
             return View(enrollments);
         }
 
@@ -95,9 +95,9 @@ namespace Cultural_Center.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentGroupsId,StudentsId")] Enrollments enrollments)
+        public async Task<IActionResult> Edit(int StudentGroupsId, int StudentsId, [Bind("StudentGroupsId,StudentsId")] Enrollments enrollments)
         {
-            if (id != enrollments.StudentGroupsId)
+            if (StudentGroupsId != enrollments.StudentGroupsId || StudentsId != enrollments.StudentsId)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@ namespace Cultural_Center.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EnrollmentsExists(enrollments.StudentGroupsId))
+                    if (!EnrollmentsExists(enrollments.StudentGroupsId, enrollments.StudentsId))
                     {
                         return NotFound();
                     }
@@ -122,15 +122,15 @@ namespace Cultural_Center.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Address", enrollments.StudentsId);
-            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "EndTime", enrollments.StudentGroupsId);
+            ViewData["StudentsId"] = new SelectList(_context.Students, "Id", "Id", enrollments.StudentsId);
+            ViewData["StudentGroupsId"] = new SelectList(_context.StudentGroups, "Id", "Id", enrollments.StudentGroupsId);
             return View(enrollments);
         }
 
         // GET: Enrollments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? StudentGroupsId, int? StudentsId)
         {
-            if (id == null)
+            if (StudentGroupsId == null || StudentsId == null)
             {
                 return NotFound();
             }
@@ -138,7 +138,7 @@ namespace Cultural_Center.Controllers
             var enrollments = await _context.Enrollments
                 .Include(e => e.Student)
                 .Include(e => e.StudentGroup)
-                .FirstOrDefaultAsync(m => m.StudentGroupsId == id);
+                .FirstOrDefaultAsync(m => m.StudentGroupsId == StudentGroupsId && m.StudentsId == StudentsId);
             if (enrollments == null)
             {
                 return NotFound();
@@ -150,17 +150,17 @@ namespace Cultural_Center.Controllers
         // POST: Enrollments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int StudentGroupsId, int StudentsId)
         {
-            var enrollments = await _context.Enrollments.FindAsync(id);
+            var enrollments = await _context.Enrollments.FindAsync(StudentGroupsId, StudentsId);
             _context.Enrollments.Remove(enrollments);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EnrollmentsExists(int id)
+        private bool EnrollmentsExists(int StudentGroupsId, int StudentsId)
         {
-            return _context.Enrollments.Any(e => e.StudentGroupsId == id);
+            return _context.Enrollments.Any(e => e.StudentGroupsId == StudentGroupsId && e.StudentsId == StudentsId);
         }
     }
 }
