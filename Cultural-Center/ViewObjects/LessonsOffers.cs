@@ -14,7 +14,6 @@ namespace Cultural_Center.ViewObjects
         public DateTime EndDate { get; set; }
         public int NumberOfParticipants { get; set; }
         public string ClassroomNumber { get; set; }
-        //public int SubjectsId { get; set; }
         public string InstructorsFirstName { get; set; }
         public string InstructorsLastName { get; set; }
     }

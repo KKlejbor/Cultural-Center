@@ -25,7 +25,7 @@ namespace Cultural_Center.Models
         public DateTime BirthDate { get; set; }
         
         [MaxLength(9)]
-        [RegularExpression(@"\d{9}")]
+        [RegularExpression(@"\d{9}", ErrorMessage = "Invalid phone number. It should consist of 9 digits from 0-9")]
         [Required]
         public string PhoneNumber { get; set; }
         
@@ -38,7 +38,7 @@ namespace Cultural_Center.Models
         public string City { get; set; }
         
         [MaxLength(6)]
-        [RegularExpression(@"\d{2}-\d{3}")]
+        [RegularExpression(@"\d{2}-\d{3}", ErrorMessage = "Invalid post code number. It should follow the format: XX-XXX where X is a digit from 0-9")]
         [Required]
         public string Postcode { get; set; }
         
