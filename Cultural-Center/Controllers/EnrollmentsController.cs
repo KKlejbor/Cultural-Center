@@ -109,16 +109,10 @@ namespace Cultural_Center.Controllers
                     _context.Update(enrollments);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException e)
                 {
-                    if (!EnrollmentsExists(enrollments.StudentGroupsId, enrollments.StudentsId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    await e.Entries.Single().ReloadAsync();
+                    await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));
             }

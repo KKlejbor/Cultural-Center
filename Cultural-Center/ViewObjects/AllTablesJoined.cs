@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Cultural_Center.Models;
 
 namespace Cultural_Center.ViewObjects
 {
@@ -20,26 +19,26 @@ namespace Cultural_Center.ViewObjects
         public string StudentsPostcode { get; set; }
         public string StudentsEmailAddress { get; set; }
         public int StudentGroupsId { get; set; }
-        
+
         /*
          * Enrollments table
          */
         public int StudentsId { get; set; }
         public int IdStudentGroups { get; set; }
-        
+
         /*
          * StudentGroups table
          */
         public string DayOfTheWeek { get; set; }
-        
-        [DisplayFormat(DataFormatString="{0:hh\\:mm}")]
+
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
         public TimeSpan StartTime { get; set; }
-        
-        [DisplayFormat(DataFormatString="{0:hh\\:mm}")]
+
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
         public TimeSpan EndTime { get; set; }
-        
+
         public int LessonsId { get; set; }
-        
+
         /*
          * Lessons table
          */
@@ -47,21 +46,21 @@ namespace Cultural_Center.ViewObjects
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime StartDate { get; set; }
-        
+
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime EndDate { get; set; }
 
         public int NumberOfParticipants { get; set; }
         public string ClassroomNumber { get; set; }
         public int SubjectsId { get; set; }
-        
+
         /*
          * Subjects table
          */
-        public int IdSubjects { get; set;}
-        public string Name { get; set;}
+        public int IdSubjects { get; set; }
+        public string Name { get; set; }
         public int InstructorsId { get; set; }
-        
+
         /*
          * Instructors table
          */

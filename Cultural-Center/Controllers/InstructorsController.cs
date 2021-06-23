@@ -100,16 +100,10 @@ namespace Cultural_Center.Controllers
                     _context.Update(instructors);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException e)
                 {
-                    if (!InstructorsExists(instructors.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    await e.Entries.Single().ReloadAsync();
+                    await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));
             }
