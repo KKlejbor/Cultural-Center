@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
+using System.Runtime.CompilerServices;
 
 namespace Cultural_Center.Models
 {
@@ -14,13 +17,15 @@ namespace Cultural_Center.Models
         [MaxLength(9)]
         public string DayOfTheWeek { get; set; }
         
-        [MaxLength(5)]
         [Required]
-        public string StartTime { get; set; }
+        [Column(TypeName = "time")]
+        [RegularExpression(@"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format")]
+        public TimeSpan StartTime { get; set; }
         
-        [MaxLength(5)]
         [Required]
-        public string EndTime { get; set; }
+        [Column(TypeName = "time")]
+        [RegularExpression(@"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format")]
+        public TimeSpan EndTime { get; set; }
         
         public int LessonsId { get; set; }
         public Lessons Lesson { get; set; }

@@ -1,0 +1,66 @@
+﻿@model System.Collections.Generic.List<Cultural_Center.ViewObjects.LessonsOffers>
+
+@{
+    ViewBag.Title = "title";
+}
+
+<h1>Lessons Offers</h1>
+
+<p>
+    This page shows information about all avaliable lessons 
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Subject Name
+            </th>
+            <th>
+                Instructor's First Name
+            </th>
+            <th>
+               Instructor's Last Name
+            </th>
+            <th>
+                Start date
+            </th>
+            <th>
+                End date
+            </th>
+            <th>
+                Number Of Participants
+            </th>
+            <th>
+                Classroom Number
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstructorsFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstructorsLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassroomNumber)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
