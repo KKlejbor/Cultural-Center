@@ -1,0 +1,63 @@
+﻿@model System.Collections.Generic.List<Cultural_Center.ViewObjects.AllTablesJoined>
+
+@{
+    ViewBag.Title = "Similar Times Conflict";
+}
+
+<h1>A conflict has occured!</h1>
+
+<h3>
+    @ViewBag.Error
+</h3>
+<h3>Conflicting data</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Start Date
+        </th>
+        <th>
+            End Date
+        </th>
+        <th>
+            Number Of Participants
+        </th>
+        <th>
+            Classroom Number
+        </th>
+        <th>
+            Subject Name
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdLessons)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassroomNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<h3>
+    <a asp-action="Index">Back to List</a>
+</h3>

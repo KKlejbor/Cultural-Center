@@ -19,12 +19,15 @@ namespace Cultural_Center.Models
         
         [Required]
         [Column(TypeName = "time")]
-        [RegularExpression(@"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. The format should be HH:MM. Where HH refers to hours in 24 hour format and MM refers to minutes")]
+        [DisplayFormat(DataFormatString="{0:hh\\:mm}", ApplyFormatInEditMode = true)]
+        [RegularExpression(@"^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::00)?$", ErrorMessage = "Invalid time format. The format should be HH:MM. Where HH refers to hours in 24 hour format and MM refers to minutes")]
+        
         public TimeSpan StartTime { get; set; }
         
         [Required]
         [Column(TypeName = "time")]
-        [RegularExpression(@"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. The format should be HH:MM. Where HH refers to hours in 24 hour format and MM refers to minutes")]
+        [DisplayFormat(DataFormatString="{0:hh\\:mm}", ApplyFormatInEditMode = true)]
+        [RegularExpression(@"^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::00)?$", ErrorMessage = "Invalid time format. The format should be HH:MM. Where HH refers to hours in 24 hour format and MM refers to minutes")]
         public TimeSpan EndTime { get; set; }
         
         public int LessonsId { get; set; }

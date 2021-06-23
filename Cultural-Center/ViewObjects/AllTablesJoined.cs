@@ -12,23 +12,24 @@ namespace Cultural_Center.ViewObjects
         public int IdStudents { get; set; }
         public string StudentsFirstName { get; set; }
         public string StudentsLastName { get; set; }
-        public DateTime StudentsBirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string StudentsPhoneNumber { get; set; }
         public string StudentsAddress { get; set; }
         public string StudentsCity { get; set; }
         public string StudentsPostcode { get; set; }
         public string StudentsEmailAddress { get; set; }
-        public int StudentGroupsId { get; set; }
 
         /*
          * Enrollments table
          */
+        public int StudentGroupsId { get; set; }
         public int StudentsId { get; set; }
-        public int IdStudentGroups { get; set; }
+        
 
         /*
          * StudentGroups table
          */
+        public int IdStudentGroups { get; set; }
         public string DayOfTheWeek { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
@@ -58,7 +59,7 @@ namespace Cultural_Center.ViewObjects
          * Subjects table
          */
         public int IdSubjects { get; set; }
-        public string Name { get; set; }
+        public string SubjectName { get; set; }
         public int InstructorsId { get; set; }
 
         /*

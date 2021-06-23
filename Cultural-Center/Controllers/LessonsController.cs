@@ -56,14 +56,142 @@ namespace Cultural_Center.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lessons);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Add(lessons);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException e)
+                {
+                    if (e.InnerException != null)
+                    {
+                        if (e.InnerException.Message.Contains("at similar time"))
+                        {
+                            return RedirectToAction("SimilarTimesConflict",new {message = e.InnerException.Message, SubjectsId = lessons.SubjectsId});
+                            
+                        }
+                        
+                        return RedirectToAction("SameDatesConflict",
+                            new {message = e.InnerException.Message});
+
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["SubjectsId"] = new SelectList(_context.Subjects, "Id", "Id", lessons.SubjectsId);
             return View(lessons);
         }
+
+        public ActionResult SimilarTimesConflict(string message, int SubjectsId)
+        {
+            ViewBag.Error = message;
+            var query = _context.Students.Join(_context.Enrollments, s => s.Id,
+                e => e.StudentsId,
+                (s, e) => new
+                {
+                    IdStudents = s.Id,
+                    StudentsFirstName = s.FirstName,
+                    StudentsLastName = s.LastName,
+                    s.BirthDate,
+                    StudentsPhoneNumber = s.PhoneNumber,
+                    StudentsAddress = s.Address,
+                    StudentsCity = s.City,
+                    StudentsPostcode = s.Postcode,
+                    StudentsEmailAddress = s.EmailAddress,
+                    e.StudentsId,
+                    e.StudentGroupsId
+                }).Join(_context.StudentGroups, se => se.StudentGroupsId, sg => sg.Id,
+                (se, sg) => new
+                {
+                    se,
+                    IdStudentGroups = sg.Id,
+                    sg.DayOfTheWeek,
+                    sg.StartTime,
+                    sg.EndTime,
+                    sg.LessonsId
+                }).Join(_context.Lessons, seSg => seSg.LessonsId, l => l.Id,
+                (seSg, l) => new
+                {
+                    seSg,
+                    IdLesson = l.Id,
+                    l.StartDate,
+                    l.EndDate,
+                    l.NumberOfParticipants,
+                    l.ClassroomNumber,
+                    l.SubjectsId
+                }).Join(_context.Subjects, seSgL => seSgL.SubjectsId, s => s.Id,
+                (seSgL, s) => new
+                {
+                    seSgL,
+                    IdSubjects = s.Id,
+                    s.Name,
+                    s.InstructorsId
+                }).Join(_context.Instructors, seSgLS => seSgLS.InstructorsId, i => i.Id,
+                (seSgLS, i) => new
+                {
+                    seSgLS,
+                    IdInstructors = i.Id,
+                    InstructorsFirstName = i.FirstName,
+                    InstructorsLastName = i.LastName,
+                    InstructorsPhoneNumber = i.PhoneNumber,
+                    InstructorsAddress = i.PhoneNumber,
+                    InstructorsCity = i.City,
+                    InstructorsPostcode = i.Postcode,
+                    InstructorsEmailAddress = i.EmailAddress
+                }).Where(arg =>arg.seSgLS.seSgL.SubjectsId == SubjectsId);
+
+            List<AllTablesJoined> results = new List<AllTablesJoined>();
+
+            foreach (var q in query)
+            {
+                results.Add(new AllTablesJoined
+                {
+                    IdStudents = q.seSgLS.seSgL.seSg.se.IdStudents,
+                    StudentsFirstName = q.seSgLS.seSgL.seSg.se.StudentsFirstName,
+                    StudentsLastName = q.seSgLS.seSgL.seSg.se.StudentsLastName,
+                    BirthDate = q.seSgLS.seSgL.seSg.se.BirthDate,
+                    StudentsPhoneNumber = q.seSgLS.seSgL.seSg.se.StudentsPhoneNumber,
+                    StudentsAddress = q.seSgLS.seSgL.seSg.se.StudentsAddress,
+                    StudentsCity = q.seSgLS.seSgL.seSg.se.StudentsCity,
+                    StudentsPostcode = q.seSgLS.seSgL.seSg.se.StudentsPostcode,
+                    StudentsEmailAddress = q.seSgLS.seSgL.seSg.se.StudentsEmailAddress,
+                    StudentGroupsId = q.seSgLS.seSgL.seSg.se.StudentGroupsId,
+                    StudentsId = q.seSgLS.seSgL.seSg.se.StudentsId,
+                    IdStudentGroups = q.seSgLS.seSgL.seSg.IdStudentGroups,
+                    DayOfTheWeek = q.seSgLS.seSgL.seSg.DayOfTheWeek,
+                    StartTime = q.seSgLS.seSgL.seSg.StartTime,
+                    EndTime = q.seSgLS.seSgL.seSg.EndTime,
+                    LessonsId = q.seSgLS.seSgL.seSg.LessonsId,
+                    IdLessons = q.seSgLS.seSgL.IdLesson,
+                    StartDate = q.seSgLS.seSgL.StartDate,
+                    EndDate = q.seSgLS.seSgL.EndDate,
+                    NumberOfParticipants = q.seSgLS.seSgL.NumberOfParticipants,
+                    ClassroomNumber = q.seSgLS.seSgL.ClassroomNumber,
+                    SubjectsId = q.seSgLS.seSgL.SubjectsId,
+                    IdSubjects = q.seSgLS.IdSubjects,
+                    SubjectName = q.seSgLS.Name,
+                    InstructorsId = q.seSgLS.InstructorsId,
+                    IdInstructors = q.IdInstructors,
+                    InstructorsFirstName = q.InstructorsFirstName,
+                    InstructorsLastName = q.InstructorsLastName,
+                    InstructorsPhoneNumber = q.InstructorsPhoneNumber,
+                    InstructorsAddress = q.InstructorsAddress,
+                    InstructorsCity = q.InstructorsCity,
+                    InstructorsPostcode = q.InstructorsPostcode,
+                    InstructorsEmailAddress = q.InstructorsEmailAddress
+                });
+            }
+            
+            return View(results);
+        }
+        
+        public ActionResult SameDatesConflict(string message)
+        {
+            ViewBag.Error = message;
+            return View();
+        }
+        
 
         // GET: Lessons/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -140,46 +268,104 @@ namespace Cultural_Center.Controllers
         public async Task<IActionResult> LessonsOffers()
         {
             // Lessons -> Subjects -> Istructors
-            var query = _context.Lessons.Join(_context.Subjects, l => l.SubjectsId,
-                s => s.Id,
-                (l, s) => new
+            var query = _context.Students.Join(_context.Enrollments, s => s.Id,
+                e => e.StudentsId,
+                (s, e) => new
                 {
-                    SubjectName = s.Name,
-                    StartDate = l.StartDate,
-                    EndDate = l.EndDate,
-                    NumberOfParticipants = l.NumberOfParticipants,
-                    ClassroomNumber = l.ClassroomNumber,
-                    InstructorsId = s.InstructorsId
-                }).Join(_context.Instructors, s => s.InstructorsId, i => i.Id,
-                (s, i) => new
+                    IdStudents = s.Id,
+                    StudentsFirstName = s.FirstName,
+                    StudentsLastName = s.LastName,
+                    s.BirthDate,
+                    StudentsPhoneNumber = s.PhoneNumber,
+                    StudentsAddress = s.Address,
+                    StudentsCity = s.City,
+                    StudentsPostcode = s.Postcode,
+                    StudentsEmailAddress = s.EmailAddress,
+                    e.StudentsId,
+                    e.StudentGroupsId
+                }).Join(_context.StudentGroups, se => se.StudentGroupsId, sg => sg.Id,
+                (se, sg) => new
                 {
-                    SubjectName = s.SubjectName,
-                    StartDate = s.StartDate,
-                    EndDate = s.EndDate,
-                    NumberOfParticipants = s.NumberOfParticipants,
-                    ClassroomNumber = s.ClassroomNumber,
-                    InstructorsId = s.InstructorsId,
+                    se,
+                    IdStudentGroups = sg.Id,
+                    sg.DayOfTheWeek,
+                    sg.StartTime,
+                    sg.EndTime,
+                    sg.LessonsId
+                }).Join(_context.Lessons, seSg => seSg.LessonsId, l => l.Id,
+                (seSg, l) => new
+                {
+                    seSg,
+                    IdLesson = l.Id,
+                    l.StartDate,
+                    l.EndDate,
+                    l.NumberOfParticipants,
+                    l.ClassroomNumber,
+                    l.SubjectsId
+                }).Join(_context.Subjects, seSgL => seSgL.SubjectsId, s => s.Id,
+                (seSgL, s) => new
+                {
+                    seSgL,
+                    IdSubjects = s.Id,
+                    s.Name,
+                    s.InstructorsId
+                }).Join(_context.Instructors, seSgLS => seSgLS.InstructorsId, i => i.Id,
+                (seSgLS, i) => new
+                {
+                    seSgLS,
+                    IdInstructors = i.Id,
                     InstructorsFirstName = i.FirstName,
-                    InstructorsLastName = i.LastName
-                }).ToList();
+                    InstructorsLastName = i.LastName,
+                    InstructorsPhoneNumber = i.PhoneNumber,
+                    InstructorsAddress = i.PhoneNumber,
+                    InstructorsCity = i.City,
+                    InstructorsPostcode = i.Postcode,
+                    InstructorsEmailAddress = i.EmailAddress
+                });
 
-            List<LessonsOffers> offers = new List<LessonsOffers>();
+            List<AllTablesJoined> results = new List<AllTablesJoined>();
 
             foreach (var q in query)
             {
-                offers.Add(new LessonsOffers
+                results.Add(new AllTablesJoined
                 {
-                    SubjectName = q.SubjectName,
+                    IdStudents = q.seSgLS.seSgL.seSg.se.IdStudents,
+                    StudentsFirstName = q.seSgLS.seSgL.seSg.se.StudentsFirstName,
+                    StudentsLastName = q.seSgLS.seSgL.seSg.se.StudentsLastName,
+                    BirthDate = q.seSgLS.seSgL.seSg.se.BirthDate,
+                    StudentsPhoneNumber = q.seSgLS.seSgL.seSg.se.StudentsPhoneNumber,
+                    StudentsAddress = q.seSgLS.seSgL.seSg.se.StudentsAddress,
+                    StudentsCity = q.seSgLS.seSgL.seSg.se.StudentsCity,
+                    StudentsPostcode = q.seSgLS.seSgL.seSg.se.StudentsPostcode,
+                    StudentsEmailAddress = q.seSgLS.seSgL.seSg.se.StudentsEmailAddress,
+                    StudentGroupsId = q.seSgLS.seSgL.seSg.se.StudentGroupsId,
+                    StudentsId = q.seSgLS.seSgL.seSg.se.StudentsId,
+                    IdStudentGroups = q.seSgLS.seSgL.seSg.IdStudentGroups,
+                    DayOfTheWeek = q.seSgLS.seSgL.seSg.DayOfTheWeek,
+                    StartTime = q.seSgLS.seSgL.seSg.StartTime,
+                    EndTime = q.seSgLS.seSgL.seSg.EndTime,
+                    LessonsId = q.seSgLS.seSgL.seSg.LessonsId,
+                    IdLessons = q.seSgLS.seSgL.IdLesson,
+                    StartDate = q.seSgLS.seSgL.StartDate,
+                    EndDate = q.seSgLS.seSgL.EndDate,
+                    NumberOfParticipants = q.seSgLS.seSgL.NumberOfParticipants,
+                    ClassroomNumber = q.seSgLS.seSgL.ClassroomNumber,
+                    SubjectsId = q.seSgLS.seSgL.SubjectsId,
+                    IdSubjects = q.seSgLS.IdSubjects,
+                    SubjectName = q.seSgLS.Name,
+                    InstructorsId = q.seSgLS.InstructorsId,
+                    IdInstructors = q.IdInstructors,
                     InstructorsFirstName = q.InstructorsFirstName,
                     InstructorsLastName = q.InstructorsLastName,
-                    StartDate = q.StartDate,
-                    EndDate = q.EndDate,
-                    NumberOfParticipants = q.NumberOfParticipants,
-                    ClassroomNumber = q.ClassroomNumber
+                    InstructorsPhoneNumber = q.InstructorsPhoneNumber,
+                    InstructorsAddress = q.InstructorsAddress,
+                    InstructorsCity = q.InstructorsCity,
+                    InstructorsPostcode = q.InstructorsPostcode,
+                    InstructorsEmailAddress = q.InstructorsEmailAddress
                 });
             }
             
-            return View(offers);
+            return View(results);
         }
     }
 }
